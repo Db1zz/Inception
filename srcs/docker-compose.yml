@@ -1,0 +1,51 @@
+services:
+  nginx:
+    container_name: nginx
+    build: ./requirements/nginx
+    ports:
+      - "443:443"
+    volumes:
+      - wordpress_volume:/home/app
+    env_file: "./requirements/nginx/conf/nginx.env"
+    stdin_open: true
+    tty: true
+  mariadb:
+    container_name: mariadb
+    build: ./requirements/mariadb
+    ports:
+      - "3306:3306"
+    env_file: "./global.env"
+    environment:
+      MY_SQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MY_SQL_USER_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
+      - db_root_password
+    stdin_open: true
+    tty: true
+    volumes:
+      - mariadb_volume:/home/app
+  wordpress:
+    container_name: wordpress
+    build: ./requirements/wordpress
+    ports:
+      - "9000:9000"
+    env_file: "./global.env"
+    volumes:
+      - wordpress_volume:/home/app
+    stdin_open: true
+    tty: true
+
+volumes:
+  wordpress_volume:
+    driver_opts:
+      type: none
+      o: bind
+      device: 
+  mariadb_volume:
+
+secrets:
+  db_password:
+    file: "../secrets/db_password.txt"
+  db_root_password:
+    file: "../secrets/db_root_password.txt"

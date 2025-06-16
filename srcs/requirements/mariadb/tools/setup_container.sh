@@ -30,4 +30,5 @@ service mysql start
 
 rm temp_db_data
 
-mysql
+bash
+#mysql

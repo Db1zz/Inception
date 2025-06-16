@@ -5,7 +5,7 @@ services:
     ports:
       - "443:443"
     volumes:
-      - wordpress_volume:/home/app
+      - wordpress_volume:/app
     env_file: "./requirements/nginx/conf/nginx.env"
     stdin_open: true
     tty: true
@@ -24,7 +24,7 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - mariadb_volume:/home/app
+      - mariadb_volume:/var/lib/mysql
   wordpress:
     container_name: wordpress
     build: ./requirements/wordpress
@@ -32,17 +32,25 @@ services:
       - "9000:9000"
     env_file: "./global.env"
     volumes:
-      - wordpress_volume:/home/app
+      - wordpress_volume:/app
     stdin_open: true
     tty: true
 
+#mount sql database: https://learn.microsoft.com/en-us/sql/linux/sql-server-linux-docker-container-configure?view=sql-server-ver16&pivots=cs1-bash#mount-a-host-directory-as-data-volume
+#${PWD}: https://stackoverflow.com/questions/71680749/docker-failed-to-mount-local-volume-mount-no-such-file-or-directory
 volumes:
   wordpress_volume:
+    driver: local
     driver_opts:
       type: none
       o: bind
-      device: 
+      device: "${PWD}/data/wp"
   mariadb_volume:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: "${PWD}/data/mariadb"
 
 secrets:
   db_password:

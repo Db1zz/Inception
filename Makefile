@@ -1,7 +1,7 @@
 COMPOSE_PATH = ./srcs
 COMPOSE_FLAGS = --project-directory $(COMPOSE_PATH) --progress auto
 build:
-	docker compose $(COMPOSE_FLAGS) build
+	docker compose $(COMPOSE_FLAGS) build --no-cache
 
 run: 
 	docker compose $(COMPOSE_FLAGS) up -d
@@ -9,8 +9,8 @@ run:
 clean:
 	docker compose $(COMPOSE_FLAGS) down -v
 
-fclean: clean
-	docker compose $(COMPOSE_FLAGS) rm -s -f
+fclean:
+	docker compose $(COMPOSE_FLAGS) up -d --build
 
 re:	fclean build run
 

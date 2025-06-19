@@ -1,38 +1,50 @@
 services:
   nginx:
     container_name: nginx
-    build: ./requirements/nginx
     ports:
       - "443:443"
+    build: ./requirements/nginx
+    depends_on:
+      - wordpress
     volumes:
       - wordpress_volume:/app
-    env_file: "./requirements/nginx/conf/nginx.env"
+    networks:
+      - inception
+    env_file: 
+      - "./global.env"
+      - "./requirements/nginx/conf/nginx.env"
+    restart: on-failure
     stdin_open: true
     tty: true
   mariadb:
     container_name: mariadb
     build: ./requirements/mariadb
-    ports:
-      - "3306:3306"
-    env_file: "./global.env"
-    environment:
-      MY_SQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
-      MY_SQL_USER_PASSWORD_FILE: /run/secrets/db_password
-    secrets:
-      - db_password
-      - db_root_password
-    stdin_open: true
-    tty: true
+    env_file: 
+      - "./global.env"
+      - "../secrets/db_password.env"
+      - "../secrets/db_root_password.env"
     volumes:
       - mariadb_volume:/var/lib/mysql
+    networks:
+      - inception
+    restart: on-failure
+    stdin_open: true
+    tty: true
   wordpress:
     container_name: wordpress
     build: ./requirements/wordpress
-    ports:
-      - "9000:9000"
-    env_file: "./global.env"
+    depends_on:
+      - mariadb
+    env_file: 
+      - "./global.env"
+      - "../secrets/db_password.env"
+      - "../secrets/db_root_password.env"
+      - "../secrets/wordpress_admin_acc.env"
     volumes:
       - wordpress_volume:/app
+    networks:
+      - inception
+    restart: on-failure
     stdin_open: true
     tty: true
 
@@ -52,8 +64,7 @@ volumes:
       o: bind
       device: "${PWD}/data/mariadb"
 
-secrets:
-  db_password:
-    file: "../secrets/db_password.txt"
-  db_root_password:
-    file: "../secrets/db_root_password.txt"
+#https://docs.docker.com/compose/how-tos/networking/
+networks:
+  inception:
+    driver: bridge

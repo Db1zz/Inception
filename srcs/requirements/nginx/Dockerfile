@@ -7,7 +7,6 @@ RUN apt-get update && apt-get -y install nginx && apt-get -y install openssl
 
 COPY ./conf /config/conf/
 COPY ./tools /config/tools/
-COPY ./web /web/
 
 WORKDIR /config/tools
 

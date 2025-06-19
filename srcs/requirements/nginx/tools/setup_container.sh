@@ -1,16 +1,9 @@
 #!/bin/bash
+mkdir -p $SSL_PATH
+touch $SSL_CRT_PATH
+touch $SSL_KEY_PATH
 
-## REMOVE ME
-echo " \
-export DOMAIN_NAME=gonische.42.fr
-export SSL_PATH=/etc/nginx/ssl" \
->> ~/.bashrc && source ~/.bashrc
+openssl req -x509 -newkey rsa:4096 -sha256 -nodes -keyout $SSL_KEY_PATH -out $SSL_CRT_PATH -subj "/C=DE/ST=Branderburg/L=Berlin/O=42 Berlin/CN=42berlin.de" -days 3650
 
-echo " \
-export SSL_KEY_PATH=$SSL_PATH/$DOMAIN_NAME.key \
-export SSL_CRT_PATH=$SSL_PATH/$DOMAIN_NAME.crt" \
->> ~/.bashrc && source ~/.bashrc
-#
-
-./setup_ssl.sh
-./setup_nginx.sh
+cat /config/conf/default > /etc/nginx/sites-available/default
+nginx -g "daemon off;"

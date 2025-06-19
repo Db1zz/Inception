@@ -1,8 +1,8 @@
 FROM debian:latest
 
-RUN apt-get update && apt-get -y install wordpress
+RUN apt-get update && apt-get install -y wget
 
 COPY ./tools/ /config/tools/
 
-WORKDIR /config/tools
-CMD ["bash"]
+WORKDIR /app
+CMD ["/config/tools/setup_container.sh"]

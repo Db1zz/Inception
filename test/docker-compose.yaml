@@ -1,9 +1,0 @@
-services:
-  nginx:
-    build: ./
-    ports:
-      - "80:80"
-    container_name: "nginx"
-    stdin_open: true
-    tty: true
-    

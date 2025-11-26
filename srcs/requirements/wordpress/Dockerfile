@@ -10,4 +10,4 @@ COPY ./tools/ /config/tools/
 RUN chmod +x /config/tools/setup_container.sh && /config/tools/setup_container.sh
 
 WORKDIR /app
-CMD ["/config/tools/run.sh"]
+CMD ["chmod +X /config/tools/run.sh" && "/config/tools/run.sh"]

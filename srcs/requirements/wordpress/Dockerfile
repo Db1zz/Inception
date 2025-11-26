@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install \
 						php-mysqli -y
 
 COPY ./tools/ /config/tools/
+RUN chmod +x /config/tools/setup_container.sh && /config/tools/setup_container.sh
 
 WORKDIR /app
-CMD ["/config/tools/setup_container.sh"]
+CMD ["/config/tools/run.sh"]

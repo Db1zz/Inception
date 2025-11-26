@@ -1,6 +1,8 @@
 #!/bin/bash
 
-# start mysql service cuz mariadb is not doing it by some reason
+mkdir -p /var/log/mysql
+chown -R mysql:mysql /var/log/mysql
+chmod 750 /var/log/mysql
 
 # copy config file for mariadb
 cat /config/conf/50-server.cnf > /etc/mysql/mariadb.conf.d/50-server.cnf
@@ -17,10 +19,5 @@ FLUSH PRIVILEGES;" > temp_db_data
 
 mysql < temp_db_data
 
-# restart db
 mysqladmin -u${DB_ROOT_NAME} -p${DB_ROOT_PWD} shutdown
-service mariadb start
-
 rm temp_db_datax
-
-mysql -u ${DB_ROOT_NAME} -p${DB_ROOT_PWD}

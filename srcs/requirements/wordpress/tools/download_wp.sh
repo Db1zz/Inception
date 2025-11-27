@@ -7,13 +7,3 @@ fi
 if [ -z "$(ls /app -A | grep "index.php")" ]; then
     wp core download --allow-root
 fi
-
-if [ -z "$(find / -name "wp-config.php")" ]; then
-    wp config create \
-        --dbname=$MYSQL_DB_NAME \
-        --dbuser=$DB_USER_NAME \
-        --dbpass=$DB_USER_PWD \
-        --dbhost=$MYSQL_DB_NAME \
-        --locale=en_US \
-        --allow-root
-fi

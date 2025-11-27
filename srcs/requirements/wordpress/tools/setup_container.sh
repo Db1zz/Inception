@@ -9,6 +9,16 @@ wp core install \
     --admin_email=$WP_ADM_EMAIL \
     --allow-root
 
+if [ -z "$(find / -name "wp-config.php")" ]; then
+    wp config create \
+        --dbname=$MYSQL_DB_NAME \
+        --dbuser=$DB_USER_NAME \
+        --dbpass=$DB_USER_PWD \
+        --dbhost=$MYSQL_DB_NAME \
+        --locale=en_US \
+        --allow-root
+fi
+
 wp theme install astra --activate --allow-root
 sed -i 's/listen = \/run\/php\/php8.4-fpm.sock/listen = 9000/g' /etc/php/8.4/fpm/pool.d/www.conf
 mkdir -p /run/php

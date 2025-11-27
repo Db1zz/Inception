@@ -7,7 +7,6 @@ RUN apt-get update && apt-get install \
 						php-mysqli -y
 
 COPY ./tools/ /config/tools/
-RUN /config/tools/download_wp.sh
-
 WORKDIR /app
+
 CMD ["/config/tools/setup_container.sh"]

@@ -7,5 +7,7 @@ WORKDIR /
 COPY ./config /config/conf/
 COPY ./tools /config/tools/
 
+RUN /config/tools/setup_container.sh
+
 WORKDIR /config/tools
-CMD ["./setup_container.sh"]
+CMD ["run.sh"]

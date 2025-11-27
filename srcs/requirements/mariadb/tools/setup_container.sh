@@ -18,6 +18,4 @@ ALTER USER ${DB_ROOT_NAME}@localhost IDENTIFIED BY '${DB_ROOT_PWD}';
 FLUSH PRIVILEGES;" > temp_db_data
 
 mysql < temp_db_data
-
-mysqladmin -u${DB_ROOT_NAME} -p${DB_ROOT_PWD} shutdown
-rm temp_db_datax
+mysql -u ${DB_ROOT_NAME} -p${DB_ROOT_PWD}
